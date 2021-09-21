@@ -35,13 +35,18 @@ def upload_file():
     <h1>Envoyer un fichier son:</h1>
     <form method=post enctype=multipart/form-data>
       <input type=file name=file>
-      <input type=submit value=Upload>
+      <input type=submit value=Upload><br />
+      <label for="winSizeInput">Taille de la fenêtre glissante (entre 1 and 10):</label>
+      <input type="number" name="winSizeInput" min="1" max="10" value="5" oninput="this.form.winSizeRange.value=this.value" />
+      <input type="range" name="winSizeRange" min="1" max="10" value="5" oninput="this.form.winSizeInput.value=this.value" /><br />
+      <label for="StartPos">Position de départ de la fenêtre:</label>
+      <input type="number" name="StartPos" min="0.0" max="300.0" value="0.0" step="0.1" />
     </form>
     '''
 
 @app.route('/uploads/<name>')
 def analyse_file(name):
-    return 'Résultats'
+    return 'Résultats: <name>'
 
 if __name__ == '__main__':
     app.run()
