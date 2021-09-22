@@ -1,9 +1,10 @@
 import os
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
+from model import AInimalsModel
 
 UPLOAD_FOLDER = './uploads'
-ALLOWED_EXTENSIONS = {'mp3'}
+ALLOWED_EXTENSIONS = {'wav'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -50,10 +51,15 @@ def upload_file():
 
 @app.route('/uploads/<songfile>/<windowSize>/<windowStart>')
 def analyse_file(songfile,windowSize,windowStart):
+    m = AInimalsModel()
+    results=m.get_preds('./uploads/'+songfile, int(float(windowStart)), windowSize)
     return '''
     Fichier à traiter: '''+songfile+'''<br />
     Taille de la fenêtre: '''+windowSize+'''S<br />
-    Début de la fenêtre: '''+windowStart+'''S
+    Début de la fenêtre: '''+windowStart+'''S<br />
+    Meilleur prédiction: '''+str(results[1])+'''<br />
+    Prédictions: '''+str(results[0])+'''<br />
+    Spectrogramme: '''+str(results[2])+'''<br />
     '''
 
 if __name__ == '__main__':
