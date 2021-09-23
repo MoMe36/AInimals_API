@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 from model import AInimalsModel
 
@@ -33,27 +33,16 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('analyse_file', songfile=filename, windowSize=winSize, windowStart=winStart))
-    return '''
-    <!doctype html>
-    <title>Chant à analyser:</title>
-    <h1>Envoyer un fichier son:</h1>
-    <form method=post enctype=multipart/form-data>
-      <label for="file">Fichier à analyser:</label>
-      <input type=file name=file><br />
-      <label for="winSizeInput">Taille de la fenêtre glissante (entre 1 and 10):</label>
-      <input type="number" name="winSizeInput" min="1" max="10" value="5" oninput="this.form.winSizeRange.value=this.value" />
-      <input type="range" name="winSizeRange" min="1" max="10" value="5" oninput="this.form.winSizeInput.value=this.value" /><br />
-      <label for="StartPos">Position de départ de la fenêtre:</label>
-      <input type="number" name="StartPos" min="0.0" max="300.0" value="0.0" step="0.1" /><br />
-      <input type=submit value=Envoyer>
-    </form>
-    '''
+    return render_template('home.html')
+    
 
 @app.route('/uploads/<songfile>/<windowSize>/<windowStart>')
 def analyse_file(songfile,windowSize,windowStart):
     m = AInimalsModel()
     results=m.get_preds('./uploads/'+songfile, int(float(windowStart)), windowSize)
-    return '''
+    return render_template('results.html', songfile=songfile, windowSize=windowSize, windowStart=windowStart, pred_num=str(results[1]), preds=str(results[0]), spectro=str(results[2]))
+    
+    '''
     Fichier à traiter: '''+songfile+'''<br />
     Taille de la fenêtre: '''+windowSize+'''S<br />
     Début de la fenêtre: '''+windowStart+'''S<br />

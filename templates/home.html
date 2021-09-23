@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <title>AInimals sounds</title>
+    </head>
+    <body>
+        <h1>Analyser un fichier son:</h1>
+    <form method=post enctype=multipart/form-data>
+      <label for="file">Fichier à analyser:</label>
+      <input type=file name=file><br />
+      <label for="winSizeInput">Taille de la fenêtre glissante (entre 1 and 10):</label>
+      <input type="number" name="winSizeInput" min="1" max="10" value="5" oninput="this.form.winSizeRange.value=this.value" />
+      <input type="range" name="winSizeRange" min="1" max="10" value="5" oninput="this.form.winSizeInput.value=this.value" /><br />
+      <label for="StartPos">Position de départ de la fenêtre:</label>
+      <input type="number" name="StartPos" min="0.0" max="300.0" value="0.0" step="0.1" /><br />
+      <input type=submit value=Envoyer>
+    </form>
+    </body>
+</html>
