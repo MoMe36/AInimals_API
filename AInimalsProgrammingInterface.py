@@ -41,15 +41,7 @@ def analyse_file(songfile,windowSize,windowStart):
     m = AInimalsModel()
     results=m.get_preds('./uploads/'+songfile, int(float(windowStart)), windowSize)
     return render_template('results.html', songfile=songfile, windowSize=windowSize, windowStart=windowStart, pred_num=str(results[1]), preds=str(results[0]), spectro=str(results[2]))
-    
-    '''
-    Fichier à traiter: '''+songfile+'''<br />
-    Taille de la fenêtre: '''+windowSize+'''S<br />
-    Début de la fenêtre: '''+windowStart+'''S<br />
-    Meilleur prédiction: '''+str(results[1])+'''<br />
-    Prédictions: '''+str(results[0])+'''<br />
-    Spectrogramme: '''+str(results[2])+'''<br />
-    '''
+
 
 if __name__ == '__main__':
     app.run()
