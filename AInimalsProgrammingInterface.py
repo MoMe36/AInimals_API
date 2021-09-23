@@ -40,6 +40,7 @@ def upload_file():
 def analyse_file(songfile,windowSize,windowStart):
     m = AInimalsModel()
     results=m.get_preds('./uploads/'+songfile, int(float(windowStart)), windowSize)
+    os.remove('./uploads/'+songfile)
     return render_template('results.html', songfile=songfile, windowSize=windowSize, windowStart=windowStart, pred_num=str(results[1]), preds=str(results[0]), spectro=str(results[2]))
 
 
