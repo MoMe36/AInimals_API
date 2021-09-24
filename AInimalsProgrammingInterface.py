@@ -7,6 +7,8 @@ UPLOAD_FOLDER = './uploads'
 ALLOWED_EXTENSIONS = {'wav'}
 
 app = Flask(__name__)
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config.update(SECRET_KEY=os.urandom(24))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
@@ -21,18 +23,21 @@ def upload_file():
         winStart=request.form['StartPos']
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash('No file part')
+            flash('Erreur: Fichier absent dans la requête POST')
             return redirect(request.url)
         file = request.files['file']
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
-            flash('No selected file')
+            flash('Erreur: Pas de fichier sélectionné')
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('analyse_file', songfile=filename, windowSize=winSize, windowStart=winStart))
+        else:
+            flash('Erreur: Type de fichier incorrect')
+            return redirect(request.url)
     return render_template('home.html')
     
 
@@ -45,4 +50,5 @@ def analyse_file(songfile,windowSize,windowStart):
 
 
 if __name__ == '__main__':
+    
     app.run()
