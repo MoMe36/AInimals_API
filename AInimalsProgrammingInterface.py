@@ -2,6 +2,7 @@ import os
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 from model import AInimalsModel
+from PIL import Image
 
 UPLOAD_FOLDER = './uploads'
 ALLOWED_EXTENSIONS = {'wav'}
@@ -51,7 +52,9 @@ def analyse_file(songfile,windowSize,windowStart):
     m = AInimalsModel()
     results=m.get_preds('./uploads/'+songfile, int(float(windowStart)), windowSize)
     os.remove('./uploads/'+songfile)
-    return render_template('results.html', songfile=songfile, windowSize=windowSize, windowStart=windowStart, pred_num=str(results[1]), preds=str(results[0]), spectro=str(results[2]))
+    spectrogramme=Image.fromarray(results[2])
+    spectrogramme.save('./static/'+songfile+'.png')
+    return render_template('results.html', songfile=songfile, windowSize=windowSize, windowStart=windowStart, pred_num=str(results[1]), preds=str(results[0]), spectro='/static/'+songfile+'.png')
 
 
 if __name__ == '__main__':
