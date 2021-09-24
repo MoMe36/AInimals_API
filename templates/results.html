@@ -1,15 +1,10 @@
-<html>
-    <head>
-        <title>AInimals sounds</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-    </head>
-    <body>
+{% extends "layout.html" %}
+{% block body %}
         <h1>Résultat de l'analyse</h1>
-        Fichier à traiter: {{ songfile }}<br />
-        Taille de la fenêtre: {{ windowSize }}S<br />
-        Début de la fenêtre: {{ windowStart }}S<br />
-        Meilleur prédiction: {{ pred_num }}<br />
-        Prédictions: {{ preds }}<br />
-        Spectrogramme: {{ spectro }}<br />
-    </body>
-</html>
+    Fichier à traiter: {{ songfile }}<br />
+    Taille de la fenêtre: {{ windowSize }}S<br />
+    Début de la fenêtre: {{ windowStart }}S<br />
+    Meilleur prédiction: {{ pred_num }}<br />
+    Prédictions: {{ preds }}<br />
+    Spectrogramme: {{ spectro }}<br />
+{% endblock %}
