@@ -11,6 +11,11 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config.update(SECRET_KEY=os.urandom(24))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+    print("Le dossier uploads n'existait pas et a été créé")
+
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
