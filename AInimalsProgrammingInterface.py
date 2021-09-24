@@ -1,4 +1,6 @@
 import os
+import requests
+import json
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 from model import AInimalsModel
@@ -15,6 +17,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
     print("Le dossier uploads n'existait pas et a été créé")
+
+def bird_finder(birdname):
+    request_json=render_template('request.json', birdname=birdname)
+    json_params=json.loads(request_json)
+    response=requests.get("https://www.googleapis.com/customsearch/v1", params=json_params)
+    bird_found_json=response.json()
+    birdlink=bird_found_json['items'][0]['link']
+    return(birdlink)
 
 
 def allowed_file(filename):
@@ -54,7 +64,7 @@ def analyse_file(songfile,windowSize,windowStart):
     os.remove('./uploads/'+songfile)
     spectrogramme=Image.fromarray(results[2])
     spectrogramme.save('./static/'+songfile+'.png')
-    return render_template('results.html', songfile=songfile, windowSize=windowSize, windowStart=windowStart, pred_num=str(results[1]), preds=str(results[0]), spectro='/static/'+songfile+'.png')
+    return render_template('results.html', songfile=songfile, windowSize=windowSize, windowStart=windowStart, pred_num=str(results[1]), preds=str(results[0]), spectro='/static/'+songfile+'.png', birdlink=bird_finder('meme'))
 
 
 if __name__ == '__main__':
