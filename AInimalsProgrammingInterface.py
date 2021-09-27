@@ -1,6 +1,8 @@
 import os
 import requests
 import json
+import numpy as np
+from matplotlib import pyplot as plt
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 from model import AInimalsModel
@@ -68,9 +70,10 @@ def analyse_file(songfile,windowSize,windowStart):
     im=Image.open('./static/'+songfile+'.png')
     im=im.rotate(90, expand=True)
     im.save('./static/'+songfile+'.png')
-
-    
-    return render_template('results.html', songfile=songfile, windowSize=windowSize, windowStart=windowStart, pred_num=str(results[1]), preds=str(results[0]), spectro='/static/'+songfile+'.png', birdlink=bird_finder('meme'))
+    histogramme=plt.hist(results[0])
+    histogramme=plt.title("Histogramme")
+    plt.savefig('./static/histo'+songfile+'.png')
+    return render_template('results.html', songfile=songfile, windowSize=windowSize, windowStart=windowStart, pred_num=str(results[1]), preds=str(results[0]), histo='/static/histo'+songfile+'.png', spectro='/static/'+songfile+'.png', birdlink=bird_finder('meme'))
 
 
 if __name__ == '__main__':
