@@ -64,6 +64,12 @@ def analyse_file(songfile,windowSize,windowStart):
     os.remove('./uploads/'+songfile)
     spectrogramme=Image.fromarray(results[2])
     spectrogramme.save('./static/'+songfile+'.png')
+    #Rotation du spectrogramme:
+    im=Image.open('./static/'+songfile+'.png')
+    im=im.rotate(90, expand=True)
+    im.save('./static/'+songfile+'.png')
+
+    
     return render_template('results.html', songfile=songfile, windowSize=windowSize, windowStart=windowStart, pred_num=str(results[1]), preds=str(results[0]), spectro='/static/'+songfile+'.png', birdlink=bird_finder('meme'))
 
 
