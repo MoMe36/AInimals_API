@@ -4,6 +4,7 @@
     "start":"1",
     "imgSize":"medium",
     "searchType":"image",
+    "safe":"active",
     "key":"INSERT-GOOGLE-API-KEY-HERE",
     "cx":"INSERT-GOOGLE-CX-ID-HERE"
 }
